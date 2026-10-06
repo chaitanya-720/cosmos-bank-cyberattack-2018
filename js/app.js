@@ -1,8 +1,31 @@
-const state = { current: 0, data: null };
+const state = { current: 0, data: null, previous: 0 };
 const slides = Array.from(document.querySelectorAll('.slide'));
+const presentation = document.getElementById('presentation');
 const counter = document.getElementById('slide-counter');
+const sectionChip = document.getElementById('section-chip');
 const progressFill = document.getElementById('progress-fill');
 const helpPanel = document.getElementById('help-panel');
+
+function classifySection(section) {
+  const attackSections = ['Attack Flow', 'Technical', 'ATM Fraud', 'SWIFT-related', 'Timeline', 'Impact'];
+  const detectSections = ['SOC', 'Weaknesses', 'Techniques'];
+  const responseSections = ['Response', 'Lessons', 'Conclusion'];
+  const defenseSections = ['Defense-in-Depth', 'Recommendations'];
+
+  if (attackSections.includes(section)) return 'section-attack';
+  if (detectSections.includes(section)) return 'section-detect';
+  if (responseSections.includes(section)) return 'section-response';
+  if (defenseSections.includes(section)) return 'section-defense';
+  return '';
+}
+
+function applySectionTheme(activeSlide) {
+  const section = activeSlide.dataset.section || 'INTRO';
+  sectionChip.textContent = section.toUpperCase();
+  document.body.classList.remove('section-attack', 'section-detect', 'section-response', 'section-defense');
+  const sectionClass = classifySection(section);
+  if (sectionClass) document.body.classList.add(sectionClass);
+}
 
 async function loadData() {
   const response = await fetch('./data/case-study.json');
@@ -22,8 +45,15 @@ async function loadData() {
 }
 
 function showSlide(index) {
+  state.previous = state.current;
   state.current = Math.max(0, Math.min(index, slides.length - 1));
+  presentation.dataset.direction = state.current >= state.previous ? 'next' : 'prev';
+
   slides.forEach((slide, i) => slide.classList.toggle('active', i === state.current));
+
+  const activeSlide = slides[state.current];
+  applySectionTheme(activeSlide);
+
   const current = String(state.current + 1).padStart(2, '0');
   const total = String(slides.length).padStart(2, '0');
   counter.textContent = `${current} / ${total}`;
@@ -36,7 +66,7 @@ function prevSlide() { showSlide(state.current - 1); }
 function renderSummaryCards() {
   const container = document.getElementById('summary-cards');
   container.innerHTML = state.data.executiveSummary.map(item => `
-    <article class="card">
+    <article class="card" tabindex="0" title="${item.label}">
       <div>${item.label}</div>
       <strong>${item.value}</strong>
     </article>
@@ -46,14 +76,20 @@ function renderSummaryCards() {
 function renderTimeline() {
   const container = document.getElementById('timeline');
   container.innerHTML = state.data.timeline.map((event, i) => `
-    <article class="timeline-event ${event.type}" data-index="${i}">
+    <article class="timeline-event ${event.type}" data-index="${i}" tabindex="0" title="Click to expand timeline event">
       <strong>${event.title}</strong>
       <div class="note">${event.date}</div>
       <div class="details">${event.detail}</div>
     </article>
   `).join('');
-  container.querySelectorAll('.timeline-event').forEach(node => {
-    node.addEventListener('click', () => node.classList.toggle('open'));
+
+  container.querySelectorAll('.timeline-event').forEach((node, i) => {
+    setTimeout(() => node.classList.add('revealed'), i * 85);
+    const toggle = () => node.classList.toggle('open');
+    node.addEventListener('click', toggle);
+    node.addEventListener('keypress', e => {
+      if (e.key === 'Enter') toggle();
+    });
   });
 }
 
@@ -66,12 +102,13 @@ function renderAttackOverview() {
       <div class="details">${step.detail}</div>
     </article>
   `).join('');
-  const nodes = container.querySelectorAll('.flow-step');
-  nodes.forEach((node, i) => {
-    setTimeout(() => node.classList.add('revealed'), 260 * (i + 1));
-    node.addEventListener('click', () => node.classList.toggle('open'));
+
+  container.querySelectorAll('.flow-step').forEach((node, i) => {
+    setTimeout(() => node.classList.add('revealed'), 230 * (i + 1));
+    const toggle = () => node.classList.toggle('open');
+    node.addEventListener('click', toggle);
     node.addEventListener('keypress', e => {
-      if (e.key === 'Enter') node.classList.toggle('open');
+      if (e.key === 'Enter') toggle();
     });
   });
 }
@@ -106,10 +143,22 @@ function renderImpact() {
     <article class="impact-card">
       <h3>${item.category}</h3>
       <p>${item.summary}</p>
-      <div class="impact-bar"><i style="width:${item.severity}%;"></i></div>
+      <div class="impact-bar"><i style="--bar-width:${item.severity}%;"></i></div>
       <small class="note">${item.evidence}</small>
     </article>
   `).join('');
+
+  const cards = container.querySelectorAll('.impact-card');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('revealed');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.25 });
+
+  cards.forEach(card => observer.observe(card));
 }
 
 function renderVulnMap() {
@@ -126,8 +175,9 @@ function renderVulnMap() {
 function renderLifecycle() {
   const container = document.getElementById('ir-lifecycle');
   container.innerHTML = state.data.incidentResponse.map(step => `
-    <article class="life-stage" tabindex="0"><strong>${step.stage}</strong><p>${step.description}</p></article>
+    <article class="life-stage" tabindex="0" title="Click for stage details"><strong>${step.stage}</strong><p>${step.description}</p></article>
   `).join('');
+
   container.querySelectorAll('.life-stage').forEach(node => {
     const toggle = () => node.classList.toggle('open');
     node.addEventListener('click', toggle);
@@ -138,8 +188,9 @@ function renderLifecycle() {
 function renderDefenseLayers() {
   const container = document.getElementById('defense-layers');
   container.innerHTML = state.data.defenseLayers.map(layer => `
-    <article class="layer" tabindex="0"><strong>${layer.name}</strong><p>${layer.description}</p></article>
+    <article class="layer" tabindex="0" title="Click for layer details"><strong>${layer.name}</strong><p>${layer.description}</p></article>
   `).join('');
+
   container.querySelectorAll('.layer').forEach(node => {
     const toggle = () => node.classList.toggle('open');
     node.addEventListener('click', toggle);
@@ -173,13 +224,28 @@ function renderReferences() {
   `).join('');
 }
 
+async function toggleFullscreen() {
+  if (!document.fullscreenElement) {
+    await document.documentElement.requestFullscreen();
+  } else {
+    await document.exitFullscreen();
+  }
+}
+
 function setupControls() {
   document.getElementById('next-btn').addEventListener('click', nextSlide);
   document.getElementById('prev-btn').addEventListener('click', prevSlide);
 
   document.getElementById('fullscreen-btn').addEventListener('click', async () => {
-    if (!document.fullscreenElement) await document.documentElement.requestFullscreen();
-    else await document.exitFullscreen();
+    try {
+      await toggleFullscreen();
+    } catch {
+      // Fullscreen can be blocked by browser policies.
+    }
+  });
+
+  document.addEventListener('fullscreenchange', () => {
+    document.body.classList.toggle('presentation-mode', Boolean(document.fullscreenElement));
   });
 
   document.getElementById('help-toggle').addEventListener('click', () => {
@@ -197,10 +263,17 @@ function setupControls() {
     } else if (e.key === 'ArrowLeft') {
       e.preventDefault();
       prevSlide();
-    } else if (e.key === 'Home') showSlide(0);
-    else if (e.key === 'End') showSlide(slides.length - 1);
-    else if (e.key.toLowerCase() === 'f') document.getElementById('fullscreen-btn').click();
-    else if (e.key === '?') helpPanel.hidden = !helpPanel.hidden;
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      showSlide(0);
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      showSlide(slides.length - 1);
+    } else if (e.key.toLowerCase() === 'f') {
+      document.getElementById('fullscreen-btn').click();
+    } else if (e.key === '?') {
+      helpPanel.hidden = !helpPanel.hidden;
+    }
   });
 }
 
