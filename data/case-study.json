@@ -1,0 +1,283 @@
+{
+  "executiveSummary": [
+    { "label": "Target", "value": "Cosmos Cooperative Bank" },
+    { "label": "Year", "value": "2018" },
+    { "label": "Attack Type", "value": "Cyberattack / Financial Fraud" },
+    { "label": "Primary Areas", "value": "ATM/Card Infrastructure + SWIFT-related transactions" },
+    { "label": "Impact", "value": "Large-scale unauthorized financial transactions" }
+  ],
+  "timeline": [
+    {
+      "title": "Initial compromise (reported)",
+      "date": "2018 (public reporting)",
+      "type": "attack",
+      "detail": "Public reporting indicates attackers gained unauthorized capability in bank-related transaction systems before large fraudulent activity was observed."
+    },
+    {
+      "title": "Coordinated ATM/card phase",
+      "date": "Aug 2018 (reported)",
+      "type": "attack",
+      "detail": "A large burst of fraudulent ATM/card transactions was reported over a short period, consistent with coordinated misuse."
+    },
+    {
+      "title": "International transfer phase",
+      "date": "Aug 2018 (reported)",
+      "type": "attack",
+      "detail": "Unauthorized transfer instructions involving SWIFT-related operations were reported as part of the incident."
+    },
+    {
+      "title": "Detection and alerting",
+      "date": "After suspicious transactions were observed",
+      "type": "detect",
+      "detail": "Abnormal transaction patterns triggered incident recognition and response escalation."
+    },
+    {
+      "title": "Investigation",
+      "date": "Post-incident",
+      "type": "detect",
+      "detail": "Bank statements and media reporting describe forensic and investigative follow-up with external stakeholders."
+    },
+    {
+      "title": "Response and recovery",
+      "date": "Post-detection",
+      "type": "response",
+      "detail": "Containment, transaction control actions, and recovery planning were carried out as part of post-incident response."
+    }
+  ],
+  "attackOverview": [
+    {
+      "stage": "ATTACKERS",
+      "label": "Technical interpretation",
+      "tag": "interpretation",
+      "detail": "Threat actors are inferred from coordinated transaction abuse patterns reported publicly."
+    },
+    {
+      "stage": "COMPROMISED SYSTEM / INFRASTRUCTURE",
+      "label": "Reported + interpretation",
+      "tag": "fact",
+      "detail": "Public reports indicate unauthorized activity linked to the bank's transaction environment."
+    },
+    {
+      "stage": "ATM / CARD TRANSACTION ABUSE",
+      "label": "Reported",
+      "tag": "fact",
+      "detail": "Large fraudulent ATM/card transaction activity was widely reported."
+    },
+    {
+      "stage": "FRAUDULENT WITHDRAWALS",
+      "label": "Reported",
+      "tag": "fact",
+      "detail": "Cash withdrawal fraud formed a major visible part of the incident impact."
+    },
+    {
+      "stage": "INTERNATIONAL TRANSFERS",
+      "label": "Reported",
+      "tag": "fact",
+      "detail": "Unauthorized transactions linked to SWIFT-related operations were reported."
+    },
+    {
+      "stage": "FINANCIAL LOSS",
+      "label": "Reported figures vary by source",
+      "tag": "model",
+      "detail": "Several reports cite approximately ₹94.42 crore total impact; treat this as source-attributed reporting rather than a single authoritative forensic number."
+    }
+  ],
+  "techniques": [
+    {
+      "technique": "Malicious software / system compromise (reported)",
+      "purpose": "Gain unauthorized transaction capability",
+      "impact": "Integrity loss in transaction processing",
+      "detection": "EDR alerts, file/process anomaly baselines"
+    },
+    {
+      "technique": "Credential/access compromise (possible)",
+      "purpose": "Operate privileged workflows",
+      "impact": "Unauthorized transaction initiation",
+      "detection": "Privileged login anomaly monitoring"
+    },
+    {
+      "technique": "Transaction manipulation",
+      "purpose": "Push fraudulent financial instructions",
+      "impact": "Direct financial loss",
+      "detection": "Velocity checks, rule-based fraud controls"
+    },
+    {
+      "technique": "Coordinated ATM fraud",
+      "purpose": "Rapid cash-out",
+      "impact": "Distributed withdrawal abuse",
+      "detection": "Cross-ATM correlation and geospatial alerts"
+    },
+    {
+      "technique": "Unauthorized international transfer activity",
+      "purpose": "External fund movement",
+      "impact": "Cross-border exposure",
+      "detection": "SWIFT-related transaction validation controls"
+    }
+  ],
+  "impact": [
+    {
+      "category": "Financial Impact",
+      "summary": "Media and institutional reporting frequently cite losses near ₹94.42 crore.",
+      "severity": 88,
+      "evidence": "Source-attributed; reported figures vary by source."
+    },
+    {
+      "category": "Operational Impact",
+      "summary": "Emergency response and transaction controls likely disrupted normal operations.",
+      "severity": 75,
+      "evidence": "Inference from incident response reporting."
+    },
+    {
+      "category": "Reputational Impact",
+      "summary": "Public confidence and scrutiny of cybersecurity posture increased.",
+      "severity": 70,
+      "evidence": "Consistent with financial-sector breach outcomes."
+    },
+    {
+      "category": "Customer Impact",
+      "summary": "Potential temporary disruption and concern for account safety.",
+      "severity": 62,
+      "evidence": "General impact model for large transaction-fraud incidents."
+    },
+    {
+      "category": "Cybersecurity Impact",
+      "summary": "Highlighted need for integrated fraud + cyber monitoring.",
+      "severity": 84,
+      "evidence": "Supported by post-incident analysis themes."
+    }
+  ],
+  "vulnerabilityAnalysis": [
+    {
+      "category": "1. Access Control",
+      "potentialWeakness": "Inadequate hardening of privileged access paths",
+      "attackOpportunity": "Unauthorized transaction actions",
+      "control": "MFA + strict privileged access governance",
+      "note": "Security lesson/inference unless explicitly documented."
+    },
+    {
+      "category": "2. Transaction Monitoring",
+      "potentialWeakness": "Insufficient real-time anomaly correlation",
+      "attackOpportunity": "High-volume fraud before containment",
+      "control": "Real-time transaction analytics",
+      "note": "Inference based on transaction-fraud profile."
+    },
+    {
+      "category": "3. Network Segmentation",
+      "potentialWeakness": "Broad lateral movement paths",
+      "attackOpportunity": "Pivot into transaction systems",
+      "control": "Segment critical payment infrastructure",
+      "note": "Conceptual defensive lesson."
+    },
+    {
+      "category": "4. Endpoint Security",
+      "potentialWeakness": "Limited endpoint telemetry",
+      "attackOpportunity": "Stealthy persistence",
+      "control": "EDR and behavioral detection",
+      "note": "Security lesson/inference."
+    },
+    {
+      "category": "5. Privileged Access",
+      "potentialWeakness": "Over-permissive admin capabilities",
+      "attackOpportunity": "Abuse of high-trust operations",
+      "control": "PAM with just-in-time access",
+      "note": "Security lesson/inference."
+    },
+    {
+      "category": "6. Security Monitoring",
+      "potentialWeakness": "Alert silos across cyber and fraud teams",
+      "attackOpportunity": "Delayed high-confidence detection",
+      "control": "Unified SIEM + fraud telemetry",
+      "note": "Security lesson/inference."
+    },
+    {
+      "category": "7. Incident Response",
+      "potentialWeakness": "Unrehearsed financial-cyber playbooks",
+      "attackOpportunity": "Longer containment times",
+      "control": "Regular IR drills and cross-team exercises",
+      "note": "Security lesson/inference."
+    },
+    {
+      "category": "8. Third-Party / Payment Controls",
+      "potentialWeakness": "Insufficient validation checkpoints",
+      "attackOpportunity": "Unauthorized downstream processing",
+      "control": "Strong transaction authorization controls",
+      "note": "Security lesson/inference."
+    }
+  ],
+  "incidentResponse": [
+    { "stage": "Preparation", "description": "Define integrated cyber-fraud playbooks, contacts, and critical system maps." },
+    { "stage": "Detection & Analysis", "description": "Correlate transaction anomalies with system and access telemetry." },
+    { "stage": "Containment", "description": "Isolate affected pathways and apply emergency transaction controls." },
+    { "stage": "Eradication", "description": "Remove malicious access paths and rotate sensitive credentials." },
+    { "stage": "Recovery", "description": "Restore trusted operations with enhanced monitoring." },
+    { "stage": "Lessons Learned", "description": "Convert findings into durable controls, testing, and governance updates." }
+  ],
+  "defenseLayers": [
+    { "name": "PERIMETER SECURITY", "description": "Boundary filtering and secure remote access controls." },
+    { "name": "NETWORK SEGMENTATION", "description": "Isolation between user zones and high-value payment systems." },
+    { "name": "ENDPOINT SECURITY", "description": "EDR, anti-malware, hardening, and continuous endpoint telemetry." },
+    { "name": "IDENTITY & ACCESS MANAGEMENT", "description": "MFA, least privilege, and privileged session controls." },
+    { "name": "TRANSACTION MONITORING", "description": "Real-time velocity, behavior, and threshold anomaly rules." },
+    { "name": "SIEM / SOC", "description": "Centralized detection and coordinated triage workflows." },
+    { "name": "FRAUD DETECTION", "description": "Card and payment fraud analytics integrated with SOC operations." },
+    { "name": "INCIDENT RESPONSE", "description": "Tested response playbooks for cyber-financial compromise events." },
+    { "name": "BACKUP & RECOVERY", "description": "Resilient restoration and continuity planning." }
+  ],
+  "recommendations": [
+    { "title": "Multi-factor authentication", "detail": "Apply MFA to all privileged and sensitive transaction-access workflows." },
+    { "title": "Privileged access management", "detail": "Use just-in-time elevation and continuous privileged session oversight." },
+    { "title": "Network segmentation", "detail": "Separate card/ATM, core banking, and SWIFT-related processing zones." },
+    { "title": "Real-time transaction monitoring", "detail": "Detect velocity and pattern anomalies before fraud scales." },
+    { "title": "ATM anomaly detection", "detail": "Correlate simultaneous geo-distributed ATM withdrawals." },
+    { "title": "Strong SWIFT security controls", "detail": "Enforce independent approval and strict message validation procedures." },
+    { "title": "Endpoint detection and response", "detail": "Continuously monitor suspicious processes and persistence behavior." },
+    { "title": "SIEM", "detail": "Unify logs from identity, endpoint, and transaction systems for triage." },
+    { "title": "Regular vulnerability assessment", "detail": "Identify exploitable weaknesses before threat actors do." },
+    { "title": "Patch management", "detail": "Close known software vulnerabilities quickly in critical systems." },
+    { "title": "Continuous log monitoring", "detail": "Track and investigate unusual access and transaction activities." },
+    { "title": "Incident response drills", "detail": "Rehearse response workflows to reduce containment delay." },
+    { "title": "Employee security awareness", "detail": "Reduce credential compromise and social engineering success rates." },
+    { "title": "Backup and recovery strategy", "detail": "Ensure resilient restoration while preserving forensic evidence." }
+  ],
+  "lessons": [
+    { "title": "Layered security is essential", "detail": "No single control can protect high-value financial systems." },
+    { "title": "Transaction monitoring is core security", "detail": "Fraud analytics must sit alongside traditional cyber defense." },
+    { "title": "Privileged access is high risk", "detail": "Tight identity governance limits high-impact misuse." },
+    { "title": "Anomalies require rapid escalation", "detail": "Time-to-detection directly affects financial blast radius." },
+    { "title": "Segmentation reduces impact", "detail": "Isolation slows attacker movement into critical payment paths." },
+    { "title": "Response must be rehearsed", "detail": "Cross-functional drills improve containment speed and quality." },
+    { "title": "Cyber + financial controls must converge", "detail": "Security and fraud teams need integrated visibility and operations." }
+  ],
+  "references": [
+    {
+      "organization": "Reserve Bank of India (RBI)",
+      "title": "Statement by RBI on Cyber Incident at Cosmos Bank",
+      "date": "2018",
+      "link": "https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx?prid=44934"
+    },
+    {
+      "organization": "SWIFT",
+      "title": "Customer Security Programme (CSP) Overview",
+      "date": "Accessed for defensive context",
+      "link": "https://www.swift.com/your-needs/cyber-security/customer-security-programme"
+    },
+    {
+      "organization": "The Hindu BusinessLine",
+      "title": "Cosmos Bank cyber attack: Rs 94.42 crore siphoned off",
+      "date": "2018-08-14",
+      "link": "https://www.thehindubusinessline.com/money-and-banking/cosmos-bank-cyber-attack-rs-9442-crore-siphoned-off/article24681247.ece"
+    },
+    {
+      "organization": "Indian Express",
+      "title": "Pune's Cosmos Bank hacked, Rs 94 crore withdrawn",
+      "date": "2018-08-14",
+      "link": "https://indianexpress.com/article/india/punes-cosmos-bank-hacked-rs-94-crore-withdrawn-5304267/"
+    },
+    {
+      "organization": "The Economic Times",
+      "title": "Cosmos Bank says malware attack caused withdrawals and transfer losses",
+      "date": "2018-08",
+      "link": "https://economictimes.indiatimes.com/industry/banking/finance/banking/pune-based-cosmos-bank-loses-rs-94-crore-in-cyber-attack/articleshow/65383412.cms"
+    }
+  ]
+}
